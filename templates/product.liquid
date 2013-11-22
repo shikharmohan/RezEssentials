@@ -1,0 +1,167 @@
+<div id="product" class="{{ product.handle }}">
+  <div class="row">
+    <div class="{% if settings.product_layout_style == "vertical" %}span5{% else %}span7{% endif %}">
+      <div class="image featured">
+        {% if settings.enable_product_image_zoom %}
+        <a href="{{ product.featured_image | product_img_url: 'original' }}" class="cloud-zoom" rel="position: 'inside', showTitle: 'false'" id="placeholder">
+          <img src="{{ product.featured_image | product_img_url: 'original' }}" alt="{{ product.featured_image.alt | escape }}" />
+        </a>
+        {% else %}
+        <a href="{{ product.featured_image | product_img_url: 'original' }}" class="zoom" id="placeholder">
+          <img src="{{ product.featured_image | product_img_url: 'original' }}" alt="{{ product.featured_image.alt | escape }}" />
+        </a>
+        {% endif %}
+        <a href="{{ product.featured_image | product_img_url: 'original' }}" class="zoom" id="zoom-image" {% unless settings.display_product_image_enlarge %}style="display:none;"{% endunless %}>Enlarge Image</a>
+        {% if product.price_min < product.compare_at_price_min %}
+        {% if product.handle == 'personal-fridge' %}
+        <span class="banner sale">Early Bird Special!</span>
+        {% else %}
+        <span class="banner sale">Sale</span>{% endif %}{% endif %}
+      </div> <!-- /.image -->
+      {% if product.images.size > 1 %}
+      <div class="thumbs clearfix">
+        {% for image in product.images %}
+        {% if settings.enable_product_image_zoom %}
+        <div class="image">
+          <a href="{{ image | product_img_url: 'original' }}" class="cloud-zoom-gallery" rel="useZoom: 'placeholder', smallImage: '{{ image | product_img_url: 'original' }}', tint: '#ffffff'">
+            <img src="{{ image | product_img_url: 'small' }}" alt="{{ image.alt | escape }}" />
+          </a>
+        </div>
+        {% else %}
+        <div class="image">
+          <a href="{{ image | product_img_url: 'original' }}" data-original-image="{{ image | product_img_url: 'original' }}">
+            <img src="{{ image | product_img_url: 'small' }}" alt="{{ image.alt | escape }}" />
+          </a>
+        </div>
+        {% endif %}
+        {% endfor %}
+      </div><!-- /.thumbs -->
+      {% endif %}
+    </div> <!-- /.span8 -->
+    <div class="{% if settings.product_layout_style == "vertical" %}span7{% else %}span5{% endif %}" style="float:right">
+      <h1 class="title" style = "color: #2C99E2;
+font-weight: 200;
+font-size: 41px;
+line-height: 36px;">{{ product.title }}</h1>
+      <div class="purchase">
+        <h2 class="price" style = "padding:0;color: #D1254A;border:none; font-size:26px;" id="price-preview">{{ product.price_min | money }}{% if product.price_min < product.compare_at_price_min %} <del>{{ product.compare_at_price_min | money }}</del>{% endif %}</h2>
+      </div> <!-- /.purchase -->
+      <form style = "border-bottom:  1px solid #f0f0f0;"id="add-item-form" action="/cart/add" method="post" class="variants clearfix">
+        {% assign hide_default_title = false %}
+        {% if product.variants.size == 1 and product.variants.first.title contains 'Default' %}
+          {% assign hide_default_title = true %}
+        {% endif %}  
+         <div class="select clearfix"{% if hide_default_title %} style="margin-bottom: 20px;display:none"{% endif %}>
+          <select id="product-select" name='id'>
+            {% for variant in product.variants %}
+            <option value="{{ variant.id }}">{{ variant.title }} - {{ variant.price | money }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        
+
+        {% if settings.display_quantity_dropdown %}
+                         <!--SOCIAL MEDIA BUTTON-->
+
+        <div class="selector-wrapper" style = "margin-top:10px;">
+          <label style = "font-weight:200;color: #4b4b4b">Quantity</label>
+          <select name="quantity">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+            <option>6</option>
+            <option>7</option>
+            <option>8</option>
+            <option>9</option>
+            <option>10</option>
+          </select>
+        </div>
+        {% endif %}
+        
+        <div class="purchase-section{% if product.variants.size > 1 %} multiple{% endif %}">
+  
+</div>
+
+          <div class="purchase">
+            {% unless product.available %}
+            <h2 class = "message" style = "border:none;color:#D1254A;">Sold Out</h2>
+            {% else %}
+            <span class="add-to-cart clearfix">
+              <div class="icon">Add to cart</div>
+              <div class="details">
+                <h3 class="message" id="add-to-cart">Add to cart</h3>
+                
+              </div>
+            </span>
+            {% endunless %}
+            <input type="submit" name="add" id="add-item-to-cart" value="Add to cart" style="display:none;" />
+            
+          </div> <!-- /.purchase -->
+          
+         <!-- /.clearfix -->
+      </form>
+      <div class="description">
+        {% if product.handle == 'personal-fridge' %}
+        <img style = "border-bottom:1px solid #f0f0f0;padding-top:10px;padding-bottom:10px;padding-right:170px;" src = "{{'fridgeboxco.png'|asset_url}}" usemap = "#roomdirect1" />
+        {% elsif product.handle == 'haier-2-7-cu-ft-compact-refrigerator-black' %}
+                <img style = "border-bottom:1px solid #f0f0f0;padding-top:10px;padding-bottom:10px;padding-right:170px;" src = "{{'fridgeboxco.png'|asset_url}}" usemap = "#roomdirect1" />
+        {% elsif product.handle == 'haier-1-7-cu-ft-compact-refrigerator-black' %}
+                <img style = "border-bottom:1px solid #f0f0f0;padding-top:10px;padding-bottom:10px;padding-right:170px;" src = "{{'fridgeboxco.png'|asset_url}}" usemap = "#roomdirect1" />
+        {% else %}
+                <img style = "border-bottom:1px solid #f0f0f0;padding-top:10px;padding-bottom:10px;padding-right:170px;" src = "{{'1yearwarranty.png'|asset_url}}" usemap = "#roomdirect1" />
+        {% endif %}
+        <map name="roomdirect1">
+		<area shape="rect" coords="0,0,240,31" href="http://rezessentials.com/pages/about-us#ourdiff" alt="Sun">
+        </map>
+        <h2>{% assign variant = product.variants.first %}
+  {% if variant.available %}
+  {% if variant.inventory_management != '' %}
+     {% if variant.inventory_quantity > 0 and variant.inventory_quantity <= 10 %}
+         Only <span style = color:#D1254A;>{{ variant.inventory_quantity }} </span> in stock
+          
+     {% endif %}
+   
+  {% endif %}
+{% endif %}</h2>
+        {{ product.description }}
+      </div>
+      
+     
+      {% include 'social-sharing' %}
+      
+      
+    </div> <!-- /.span4 -->
+  </div> <!-- /.row -->
+  
+  {% if collection and settings.display_product_collection_nav %}
+  <div class="row">
+    <div class="span12">
+      <div class="collection-nav clearfix">
+        {% if collection.previous_product %}
+        <div class="previous_product">
+          <a href="{{ collection.previous_product }}" class="previous_product">Previous Product</a>
+        </div>
+        {% endif %}
+        {% if collection.next_product %}
+        <div class="next_product">
+          <a href="{{ collection.next_product }}" class="next_product">Next Product</a>
+        </div>
+        {% endif %}
+      </div> <!-- /.collection-nav -->
+    </div> <!-- /.span12 -->
+  </div> <!-- /.row -->
+  {% endif %}
+
+  {% if settings.show_related_products %}
+  {% include 'related-products' %}
+  {% endif %}
+  
+</div> <!-- /#product -->
+
+<div style="display:none" id="preloading">
+{% for image in product.images offset: 1 %}
+{{ image | product_img_url: 'original' | img_tag }}
+{% endfor %}
+</div>

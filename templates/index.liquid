@@ -1,0 +1,46 @@
+<div id="index" class="clearfix">
+  {% if settings.homepage_products_or_collections != "none" %}
+  <div class="row">
+    <div class="span12">
+      <h1 class="featured" >Featured Essentials</h1>
+    </div> <!-- /.span12 -->
+  </div> <!-- /.row -->
+  {% endif %}
+  {% if settings.homepage_products_or_collections == "collections" %}
+  <div class="row products masonry">
+    {% for link in linklists[settings.frontpage_linklist].links %}
+    {% if link.type == 'collection_link' and link.object.all_products_count > 0 %}
+    {% assign collection = link.object %}
+    {% include 'collection-loop' %}
+    {% endif %}
+    {% endfor %}
+  </div><!-- /.row -->
+  {% endif %}
+  {% if settings.homepage_products_or_collections == "products" %}
+  <div class="row products masonry" style = "left:2px;">
+    {% for product in collections[settings.frontpage_collection].products limit: settings.pagination_limit %}
+    {% include 'product-loop' with settings.frontpage_collection %}
+    {% endfor %}
+  </div> <!-- /.row -->
+  {% endif %}
+  {% if settings.index_page_content != empty %}
+  <div class="row">
+    <div class="span12">
+      <h2>{{ pages[settings.index_page_content].title }}</h2>
+      <div class="page-content">
+        {{ pages[settings.index_page_content].content }}
+      </div>
+    </div> <!-- /.span12 -->
+  </div> <!-- /.row -->
+  {% endif %}
+</div> <!-- /#index -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-42063405-1', 'rezessentials.com');
+  ga('send', 'pageview');
+
+</script>

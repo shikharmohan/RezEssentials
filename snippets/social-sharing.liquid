@@ -1,0 +1,54 @@
+<div id="social" class="clearfix">
+  <h3 style = "font-family: Arial;">Share this product</h3>
+
+{% capture shareurl %}{{ shop.url }}{{ product.url }}{% endcapture %}
+
+<a id="ps-twitter" class="product-share-item" href="http://twitter.com/home?status=Check%20out%20this%20{%if template contains "article" or template contains "blog"%}blog%20post{% elsif template contains "product" %}product{%endif%}:+{{ shareurl }}"></a>
+<a id="ps-facebook" class="product-share-item" href="http://www.facebook.com/sharer.php?u={{ shareurl }}&t={{ product.title }}"></a>
+<a id="ps-mail" class="product-share-item" href="mailto:?subject={{ article.title }}&body=Check out this {%if template contains "article" or template contains "blog"%}blog post{% elsif template contains "product" %}product{%endif%}: {{ shareurl }}"></a>
+
+  <style>
+  #product-share {
+  border-top:none;
+  margin-bottom:40px;
+}
+
+#product-share h3 {
+  font-size:19px;
+  color:{{ settings.global_heading_font_color }};
+  margin:0 0 31px;
+  font-family:{{ settings.headings_font }};
+}
+
+.product-share-item {
+  display:block;
+  height:31px;
+  width:31px;
+  background:url('{{ 'share-icons-sprite.png' | asset_url }}') 0 0;
+  float:left;
+  margin-left:8px;
+  position:relative;          
+}
+
+#ps-facebook { background-position: -166px -3px ; }
+#ps-twitter { background-position: -126px -3px ; margin-left:0px; }
+#ps-tumblr { background-position: -206px -3px ; }
+#ps-pinterest { background-position: -246px -3px ; }
+#ps-google { background-position: -285px -3px ; }
+#ps-mail { background-position: -324px -3px ; }
+
+#ps-facebook:hover { background-position: -166px -37px ; }
+#ps-twitter:hover { background-position: -126px -37px ; }
+#ps-tumblr:hover { background-position: -206px -37px ; }
+#ps-pinterest:hover { background-position: -246px -37px ; }
+#ps-google:hover { background-position: -285px -37px ; }
+#ps-mail:hover { background-position: -324px -37px ; }</style>
+</div>
+
+<script type="text/javascript">
+  (function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/plusone.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+  })();
+</script>

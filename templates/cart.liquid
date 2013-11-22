@@ -1,0 +1,158 @@
+<div id="cart" style = "width:950px;">
+  <form action="/cart" method="post" id="cartform">
+    {% if cart.item_count == 0 %}
+    <div class="row">
+      <div class="span12 expanded-message" style = "margin:0;">
+        <h2>Your cart is empty</h2>
+      </div> <!-- /.span12 -->
+    </div> <!-- /.row -->
+    {% else %}
+    <div class="row">
+      <div class="span12" style = "margin:0;">
+        <h1 style = "margin-top:20px;color:#3D474A;font-size:36px;">Your cart</h1>
+        <!--<h2 style="font-size: 24px;"><a href="http://rezessentials.com/pages/about-us#ambassador">Learn how you can <span style="color: #d1254a;">save up to 30%</span> on these essentials by becoming a <span style="color: #d1254a;">RezAmbassador</span> </a></h2>-->
+        <table>
+          <thead>
+            <tr>
+              <th class="image">&nbsp;</th>
+              <th class="item">Item</th>
+              <th class="qty">Quantity</th>
+              <th class="price">Price</th>
+              <th class="remove">Remove</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in cart.items %}
+            <tr>
+              <td class="image">
+                <div class="product_image">
+                  <a href="{{ item.product.url }}">
+                    <img src="{{ item.product.featured_image | product_img_url: 'compact' }}"  alt="{{ item.product.title }}" />
+                  </a>
+                </div>
+              </td>
+              <td class="item"><a href="{{item.product.url }}"><strong>{{ item.title }}</strong></a>
+                <div class="item-description">
+                  {{ item.product.description | strip_html | truncatewords: 20 }}
+                </div>
+              </td>
+              <td class="qty">
+                <input type="text" size="4" name="updates[]" id="updates_{{ item.id }}" value="{{ item.quantity }}" onfocus="this.select();" class="tc item-quantity" />
+              </td>
+              <td class="price">{{ item.line_price | money }}</td>
+              <td class="remove"><a href="/cart/change?line={{ forloop.index }}&quantity=0" class="cart">Remove</a></td>
+            </tr>
+            {% endfor %}
+            <tr class="summary">
+              <td class="image">&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td class="price"><span class="total"><strong>{{ cart.total_price | money }}</strong></span></td>
+              <td>&nbsp;</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="buttons clearfix" style = padding-bottom:30px; id = "info">
+          <div class = "span6" style = "float: left;">
+            <p style = "color:red;font-family:'BebasNeueRegular'Helvetica, Arial, sans-serif;font-weight:200;line-spacing:2px;font-size:18px;":>Please Choose Pickup Time &amp; Location</p>
+            <p>
+            <label for="note" style = "font-weight: bold">Student Name:</label>
+            <input type = "text" name="attributes[student]" id="student" style = "height: 20px; width:300px;" value = "{{cart.attributes.student}}" >
+          </p>
+             <label for="note" style = "font-weight: bold">Pickup Time and Location:</label>
+            <select style = font-family:Arial; name="attributes[pickup]" id="pickup" >
+              <option value = "SELECT" {% if cart.attributes.pickup = "SELECT" %}{% endif %}>SELECT</option>
+              <option value = "Wed 9/18 - North Campus, South of Bobb-McCulloch" {% if cart.attributes.pickup = "Wed 9/18 - North Campus, South of Bobb-McCulloch" %} {%endif%}>Wed 9/18 - North Campus, South of Bobb-McCulloch</option>
+              <option value = "Thurs 9/19 - South Campus, parking lot across Arch" {% if cart.attributes.pickup = "Thurs 9/19 - South Campus, parking lot across Arch" %} {%endif%}>Thurs 9/19 - South Campus, parking lot across Arch</option>
+              <option value = "Fri 9/20 - North Campus, South of Bobb-McCulloch" {% if cart.attributes.pickup = "Fri 9/20 - North Campus, South of Bobb-McCulloch" %} {%endif%}>Fri 9/20 - North Campus, South of Bobb-McCulloch</option>
+            </select> 
+           
+            <select style = font-family:Arial; name="attributes[time]" id="wwwform" >
+              <option value = "SELECT" {% if cart.attributes.time = "SELECT" %}{%endif%}>SELECT</option>
+              <option value = "10 AM" {% if cart.attributes.time = "10 AM" %}{%endif%}>10 AM</option>
+              <option value = "11 AM" {% if cart.attributes.time = "11 AM" %}{%endif%}>11 AM</option>
+              <option value = "12 PM" {% if cart.attributes.time = "12 PM" %}{%endif%}>12 PM</option>
+               <option value = "1 PM" {% if cart.attributes.time = "1 PM" %}{%endif%}>1 PM</option>
+               <option value = "2 PM" {% if cart.attributes.time = "2 PM" %}{%endif%}>2 PM</option>
+               <option value = "3 PM" {% if cart.attributes.time = "3 PM" %}{%endif%}>3 PM</option>
+               <option value = "4 PM" {% if cart.attributes.time = "4 PM" %}{%endif%}>4 PM</option>
+            </select>
+
+            <script>
+              function pkdisp(){
+              var date = document.getElementById("pickup");
+                if(date.value === "Tues 9/17 - South Campus, parking lot across Arch"){
+				  document.getElementById("freshnote").style.display="inline-block";
+                  document.getElementById("tueform").style.display="inline-block";
+                 
+                }
+                else{
+                  document.getElementById("freshnote").style.display="none";
+                  document.getElementById("tueform").style.display="none";
+                  document.getElementById("wwwform").style.display="inline-block";
+                }
+             
+                
+				
+              }
+            </script>
+           <!-- <label  for="note" style = "font-weight: bold;">Northwestern Residence </label>
+            <select style = font-family:Arial; name="attributes[dorm_name]" id="dorm">
+            <option value="N/A"{% if cart.attributes.dorm_name = "N/A" %} {% endif %}>N/A</option>
+   			 <option value="1835 Hinman"{% if cart.attributes.dorm_name = "1835 Hinman" %} {% endif %}>1835 Hinman</option>
+  			 <option value="Allison"{% if cart.attributes.dorm_name = "Allison" %} {% endif %}>Allison</option>
+  			 <option value="Ayers CCI"{% if cart.attributes.dorm_name = "Ayers CCI" %} {% endif %}>Ayers CCI</option>
+              <option value="Bobb"{% if cart.attributes.dorm_name = "Bobb" %} {% endif %}>Bobb</option>
+              <option value="Chapin"{% if cart.attributes.dorm_name = "Chapin" %} {% endif %}>Chapin</option>
+              <option value="College of Cultural and Community Studies"{% if cart.attributes.dorm_name = "College of Cultural and Community Studies" %} {% endif %}>College of Cultural and Community Studies</option>
+              <option value="Communications Residential College"{% if cart.attributes.dorm_name = "Communications Residential College" %} {% endif %}>Communications Residential College</option>
+              <option value="Elder"{% if cart.attributes.dorm_name = "Elder" %} {% endif %}>Elder</option>
+            <option value="Foster/Lindgren"{% if cart.attributes.dorm_name = "Foster/Lindgren" %} {% endif %}>Foster/Lindgren</option>
+              <option value="GREEN House"{% if cart.attributes.dorm_name = "GREEN House" %} {% endif %}>GREEN House</option>
+              <option value="Hobart"{% if cart.attributes.dorm_name = "Hobart" %} {% endif %}>Hobart</option>
+              <option value="Interfaith Living"{% if cart.attributes.dorm_name = "Interfaith Living" %} {% endif %}>Interfaith Living</option>
+              <option value="International Studies RC"{% if cart.attributes.dorm_name = "International Studies RC" %} {% endif %}>International Studies RC</option>
+              <option value="Jones"{% if cart.attributes.dorm_name = "Jones" %} {% endif %}>Jones</option>
+            <option value="McCulloch"{% if cart.attributes.dorm_name = "McCulloch" %} {% endif %}>McCulloch</option>
+            <option value="North Mid Quads (NMQ)"{% if cart.attributes.dorm_name = "North Mid Quads (NMQ)" %} {% endif %}>North Mid Quads (NMQ)</option>
+            <option value="Public Affairs RC"{% if cart.attributes.dorm_name = "Public Affairs RC" %} {% endif %}>Public Affairs RC</option>
+            <option value="Rogers House"{% if cart.attributes.dorm_name = "Rogers House" %} {% endif %}>Rogers House</option>
+            <option value="Sargent Hall"{% if cart.attributes.dorm_name = "Sargent Hall" %} {% endif %}>Sargent Hall</option>
+            <option value="Shepard"{% if cart.attributes.dorm_name = "Shepard" %} {% endif %}>Shepard</option>
+            <option value="Slivka"{% if cart.attributes.dorm_name = "Slivka" %} {% endif %}>Slivka</option>
+            <option value="South Mid-Quads (SMQ)"{% if cart.attributes.dorm_name = "South Mid-Quads (SMQ)" %} {% endif %}>South Mid-Quads (SMQ)</option>
+            <option value="Willard"{% if cart.attributes.dorm_name = "Willard" %} {% endif %}>Willard</option>
+  </select>
+          <p>
+            <label for="note" style = "font-weight: bold">Room Number:</label><br/>
+            <input type = "text" name="attributes[room_number]" id="room" style = "height: 20px; width:40px;" value = "{{cart.attributes.room_number}}">
+            
+          </p> -->
+          <p id = "freshnote"style = display:none;>Note: All incoming freshman have a mandatory event from 11 AM to 7 PM on Tue 9/17</p>
+
+          </div>
+          <input type="submit" id="checkout" class="btn" name="checkout" value="Checkout" />
+            
+        </div>
+
+      </div> <!-- /.span12 -->
+    </div> <!-- /.row -->
+    <div class="span5" style = "float: right;">
+      <div class="extra-checkout-buttons span6">
+        {% if additional_checkout_buttons %}
+      <!--{{ content_for_additional_checkout_buttons }} -->
+        {% endif %}
+      </div>
+      {% if settings.display_cart_note %}
+      <div class="span6">
+        <div class="checkout-buttons clearfix">
+
+
+        </div>
+      </div>
+      {% endif %}
+    </div> <!-- /.row -->
+    {% endif %}
+  </form>
+</div> <!-- /#cart -->
